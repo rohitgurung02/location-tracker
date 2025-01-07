@@ -1,29 +1,31 @@
+"use client"
+import { useState, useEffect } from "react";
 import Map from "../components/Map";
 
-const fetchPotholes = async () => {
-  const apiUrl = "https://data.providenceri.gov/api/views/tisk-wsvu/rows.json?accessType=DOWNLOAD";
-  let potholes = [];
+export default function Home() {
+  const [potholes, setPotholes] = useState([]);
 
-  try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+  useEffect(() => {
+    const fetchPotholes = async () => {
+      const apiUrl = "https://data.providenceri.gov/api/views/tisk-wsvu/rows.json?accessType=DOWNLOAD";
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-    // Parse the data to extract latitude, longitude, and descriptions
-    potholes = data.data.map((item) => ({
-      latitude: parseFloat(item[14]), // Replace with the correct index for latitude
-      longitude: parseFloat(item[15]), // Replace with the correct index for longitude
-      description: item[8] || "Pothole", // Replace with the correct index for description
-    }));
-  } catch (error) {
-    console.error("Error fetching pothole data:", error);
-  }
+        const potholesData = data.data.map((item) => ({
+          latitude: parseFloat(item[14]),
+          longitude: parseFloat(item[15]),
+          description: item[8] || "Pothole",
+        }));
 
-  return potholes;
-};
+        setPotholes(potholesData);
+      } catch (error) {
+        console.error("Error fetching pothole data:", error);
+      }
+    };
 
-
-export default async function Home() {
-  const potholes = await fetchPotholes();
+    fetchPotholes();
+  }, []);
 
   return (
     <div>
