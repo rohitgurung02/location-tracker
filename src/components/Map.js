@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useEffect, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -8,22 +7,24 @@ const Map = ({ potholes }) => {
   const [map, setMap] = useState(null);
 
   useEffect(() => {
-    // Initialize the map
-    const leafletMap = L.map("map").setView([41.823989, -71.412834], 13); // Default center (Providence, RI)
-    setMap(leafletMap);
+    if (typeof window !== "undefined") {
+      // Initialize the map only in the browser
+      const leafletMap = L.map("map").setView([41.823989, -71.412834], 13); // Default center (Providence, RI)
+      setMap(leafletMap);
 
-    // Add tile layer
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(leafletMap);
+      // Add tile layer
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(leafletMap);
 
-    return () => {
-      leafletMap.remove();
-    };
+      return () => {
+        leafletMap.remove();
+      };
+    }
   }, []);
 
   useEffect(() => {
-    if (map) {
+    if (map && typeof window !== "undefined") {
       // Define custom icon for user marker (blue color)
       const userIcon = L.icon({
         iconUrl: "https://img.icons8.com/ios-filled/50/0000FF/marker.png", // Blue marker image

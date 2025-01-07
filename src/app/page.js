@@ -1,7 +1,7 @@
 import Map from "../components/Map";
 
-async function fetchPotholes() {
-  const apiUrl = "";
+const fetchPotholes = async () => {
+  const apiUrl = "https://data.providenceri.gov/api/views/tisk-wsvu/rows.json?accessType=DOWNLOAD";
   let potholes = [];
 
   try {
@@ -19,7 +19,8 @@ async function fetchPotholes() {
   }
 
   return potholes;
-}
+};
+
 
 export default async function Home() {
   const potholes = await fetchPotholes();
